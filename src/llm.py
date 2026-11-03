@@ -12,11 +12,21 @@ def ask_llm(question, system_prompt="You are a helpful Linux assistant.", temper
         ],
         options={"temperature": temperature},
     )
+    print(f"[tokens] input={response['prompt_eval_count']} output={response['eval_count']}")
+    return response["message"]["content"]
 
-    input_tokens = response["prompt_eval_count"]
-    output_tokens = response["eval_count"]
-    print(f"[tokens] input={input_tokens} output={output_tokens}")
 
+def ask_llm_json(question, schema, system_prompt="You are a helpful Linux assistant.", temperature=0):
+    response = ollama.chat(
+        model=MODEL,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": question},
+        ],
+        format=schema,
+        options={"temperature": temperature},
+    )
+    print(f"[tokens] input={response['prompt_eval_count']} output={response['eval_count']}")
     return response["message"]["content"]
 
 
